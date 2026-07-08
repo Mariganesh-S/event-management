@@ -1,32 +1,42 @@
 <?php
 // =============================================
-// config.php - Database Configuration
+// Railway Database Configuration
 // =============================================
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'mysql.railway.internal');
+define('DB_PORT', '3306');
 define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'event_management');
+define('DB_PASS', 'HCbyxEOtysKUJKSDNGLgRHVCkRqCCnkI');
+define('DB_NAME', 'railway');
 
 define('SITE_NAME', 'EventSphere');
 define('SITE_TAGLINE', 'National Level Technical & Cultural Fest');
 
 // Create connection
 function getConnection() {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    $conn = new mysqli(
+        DB_HOST,
+        DB_USER,
+        DB_PASS,
+        DB_NAME,
+        (int)DB_PORT
+    );
+
     if ($conn->connect_error) {
-        die("<div style='font-family:sans-serif;padding:40px;background:#fee;border:1px solid #f00;color:#900;border-radius:8px;'>
-            <h2>⚠️ Database Connection Failed</h2>
-            <p>" . $conn->connect_error . "</p>
-            <p>Please ensure XAMPP MySQL is running and the database <strong>" . DB_NAME . "</strong> exists.</p>
-            <p>Import <code>database/event.sql</code> in phpMyAdmin first.</p>
-        </div>");
+        die("
+        <div style='font-family:Arial;padding:30px;background:#ffe6e6;border:1px solid red;border-radius:8px'>
+            <h2>❌ Database Connection Failed</h2>
+            <p><strong>Error:</strong> {$conn->connect_error}</p>
+        </div>
+        ");
     }
+
     $conn->set_charset("utf8");
     return $conn;
 }
 
-// Start session if not started
+// Start Session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
